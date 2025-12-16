@@ -22,16 +22,41 @@ header {
 }
 
 h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 150px;
     font-family: "Jersey 10", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  -webkit-text-stroke-color: black;
-  -webkit-text-stroke-width: 2px;
-  color: orange;
-  font-size: 4em;
-  paint-order: stroke fill;
+    font-weight: 400;
+    font-style: normal;
+    -webkit-text-stroke-color: black;
+    -webkit-text-stroke-width: 2px;
+    color: orange;
+    font-size: 4em;
+    paint-order: stroke fill;
 }
 
-.startBtn {
+.buttons {
+    margin-left: 55px;
+    margin-bottom: 210px;
+    background: linear-gradient(180deg, #FFD93D, #FFB703);
+    border: 4px solid #5C3A1A;
+    border-radius: 14px;
+    padding: 14px 32px;
+    font-family: "Jersey 10", sans-serif;
+    font-size: 20px;
+    color: #5C3A1A;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #5C3A1A, 0 10px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
 
+.buttons:hover {
+    background: linear-gradient(180deg, #FFE66D, #FFC93C);
+}
+
+.buttons:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #5C3A1A, 0 5px 8px rgba(0, 0, 0, 0.3);
 }
