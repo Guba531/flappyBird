@@ -5,7 +5,7 @@ const startBtn = document.getElementById('startBtn');
 const score = document.getElementById('scores');
 const records = document.getElementById('records');
 
-let jogoAtivo = false;
+let jogoAtivo = true;
 let points = 0;
 let record = localStorage.getItem('records')||0;
 records.textContent=record;
@@ -20,17 +20,21 @@ img.bird.src = "img/bird.png";
 img.pipe.src = "img/cano.jpg";
 img.bg.src = "img/fundo.png";
 
-let fundoX = 0;
-const speed = 1;
+let loadImg = 0;
+const totalImg = 3;
 
 Object.values(img).forEach(img => {
     img.onload = () => {
-        fundoX++;
-        if(fundoX===speed){
+        loadImg++;
+        if(totalImg===totalImg){
             desenharTelaInicial();
         }
     }
 });
+
+let fundoX = 0;
+
+const speed = 1;
 
 const bird={
     width: 50,
@@ -45,7 +49,7 @@ const bird={
 
 let pipe=[];
 const pipeDistance = 250;
-const pipeHeight = 20;
+const pipeWidth = 30;
 const pipeHeightDistance = 100;
 let frameCount = 0;
 
@@ -90,6 +94,36 @@ function drawBird() {
 
 }
 
+function drawPipe() {
+    pipe.forEach(pipe => {
+        if(img.pipe.complete){
+            ctx.save();
+            ctx.translate(pipe.x + pipeWidth/2, pipe.top/2);
+            ctx.scale(1, -1);
+            ctx.drawImage(
+                img.pipe, 
+                -pipeWidth/2,
+                -pipe.top/2,
+                pipeWidth,
+                pipe.top
+            );
+        ctx.restore();
+        ctx.drawImage(
+            img.pipe,
+            pipe.x,
+            pipe.baixo,
+            pipeWidth,
+            pipe.top - pipe.baixo
+        );
+        } else {
+            // Fallback: retângulos verdes
+            ctx.fillStyle = '#228B22';
+            ctx.fillRect(cano.x, 0, canoLargura, cano.topo);
+            ctx.fillRect(cano.x, cano.baixo, canoLargura, canvas.height - cano.baixo);
+        }
+    })
+}
+
 function startGame() {
     gameStarted = true;
     startTime = Date.now();
@@ -99,6 +133,7 @@ function startGame() {
 
 function renderizar() {
     bgLoop();
+    drawBird();
     if(jogoAtivo) {
         //atualizar();
         requestAnimationFrame(renderizar);
