@@ -26,7 +26,8 @@ const totalImg = 3;
 Object.values(img).forEach(img => {
     img.onload = () => {
         loadImg++;
-        if(totalImg===totalImg){
+        if(loadImg===totalImg){
+            createPipe();
             desenharTelaInicial();
         }
     }
@@ -95,33 +96,46 @@ function drawBird() {
 }
 
 function drawPipe() {
-    pipe.forEach(pipe => {
+    pipe.forEach(p => {
         if(img.pipe.complete){
             ctx.save();
-            ctx.translate(pipe.x + pipeWidth/2, pipe.top/2);
+            ctx.translate(p.x + pipeWidth/2, p.top/2);
             ctx.scale(1, -1);
             ctx.drawImage(
                 img.pipe, 
                 -pipeWidth/2,
-                -pipe.top/2,
+                -p.top/2,
                 pipeWidth,
-                pipe.top
+                p.top
             );
         ctx.restore();
         ctx.drawImage(
             img.pipe,
-            pipe.x,
-            pipe.baixo,
+            p.x,
+            p.bottom,
             pipeWidth,
-            pipe.top - pipe.baixo
+            canvas.height - p.bottom
         );
         } else {
             // Fallback: retângulos verdes
             ctx.fillStyle = '#228B22';
-            ctx.fillRect(cano.x, 0, canoLargura, cano.topo);
-            ctx.fillRect(cano.x, cano.baixo, canoLargura, canvas.height - cano.baixo);
+            ctx.fillRect(p.x, 0, pipeWidth, p.top);
+            ctx.fillRect(p.x, p.bottom, pipeWidth, canvas.height - p.bottom);
         }
     })
+}
+
+function createPipe() {
+    const topHeight = Math.random() * (canvas.height - pipeHeightDistance - 100) + 50;
+    const bottomY = topHeight + pipeHeightDistance;
+
+    pipe.push({
+        x: canvas.width,
+        top: topHeight,
+        bottom: bottomY,
+        pass: false
+    })
+
 }
 
 function startGame() {
@@ -131,11 +145,28 @@ function startGame() {
     timerInterval = setInterval(updateTimer, 1000);
 }
 
+function atualizar() {
+    if(!jogoAtivo) return;
+    bird.birdSpeed += bird.fall;
+    bird.y += bird.birdSpeed;
+
+    pipe.forEach(pipe => {
+        pipe.x -= 2;
+        //contar pontos
+    })
+    pipe = pipe.filter(pipe => pipe.x + pipeWidth > 0);
+    frameCount++;
+    if(frameCount %100 === 0){
+        createPipe();
+    }
+}
+
 function renderizar() {
     bgLoop();
     drawBird();
+    drawPipe();
     if(jogoAtivo) {
-        //atualizar();
+        atualizar();
         requestAnimationFrame(renderizar);
     }
 }
@@ -143,5 +174,10 @@ function renderizar() {
 function desenharTelaInicial(){
     bgLoop();
     drawBird();
+    drawPipe();
     requestAnimationFrame(desenharTelaInicial);
+}
+
+function jump() {
+    
 }
