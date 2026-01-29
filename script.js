@@ -7,17 +7,17 @@ const records = document.getElementById('records');
 
 let jogoAtivo = true;
 let points = 0;
-let record = localStorage.getItem('records')||0;
-records.textContent=record;
+let record = localStorage.getItem('records') || 0;
+records.textContent = record;
 
 const img = {
-    bird: new Image(), 
+    bird: new Image(),
     pipe: new Image(),
     bg: new Image()
 }
 
 img.bird.src = "img/bird.png";
-img.pipe.src = "img/cano.jpg";
+img.pipe.src = "img/cano.png";
 img.bg.src = "img/fundo.png";
 
 let loadImg = 0;
@@ -26,9 +26,9 @@ const totalImg = 3;
 Object.values(img).forEach(img => {
     img.onload = () => {
         loadImg++;
-        if(loadImg===totalImg){
+        if (loadImg===totalImg) {
             createPipe();
-            desenharTelaInicial();
+            renderizar();
         }
     }
 });
@@ -37,21 +37,21 @@ let fundoX = 0;
 
 const speed = 1;
 
-const bird={
+const bird = {
     width: 50,
     height: 50,
-    jump: -3,
-    fall: 0.5,
+    jump: -5,
+    fall: 0.3,
     birdSpeed: 0,
     rotate: 0,
     x: 50,
     y: canvas.height / 2,
 }
 
-let pipe=[];
-const pipeDistance = 250;
-const pipeWidth = 30;
-const pipeHeightDistance = 100;
+let pipe = [];
+const pipeDistance = 640;
+const pipeWidth = 60;
+const pipeHeightDistance = 150;
 let frameCount = 0;
 
 function bgLoop() {
@@ -75,47 +75,47 @@ function drawBird() {
 
     bird.rotate = Math.min(Math.max(bird.speed * 3, -25), 90);
 
-    ctx.translate(bird.x + bird.width/2, bird.y + bird.height/2);
+    ctx.translate(bird.x + bird.width / 2, bird.y + bird.height / 2);
     ctx.rotate(bird.rotate * Math.PI / 180);
 
     if (img.bird.complete) {
         ctx.drawImage(
-        img.bird,
-        -bird.width/2,
-        -bird.height/2,
-        bird.width,
-        bird.height
-    );
-} else {
-    ctx.fillStyle = '#FFD700';
-    ctx.fillRect(-bird.width/2, -bird.height/2, bird.width, bird.height);
-   }
+            img.bird,
+            -bird.width / 2,
+            -bird.height / 2,
+            bird.width,
+            bird.height
+        );
+    } else {
+        ctx.fillStyle = '#FFD700';
+        ctx.fillRect(-bird.width / 2, -bird.height / 2, bird.width, bird.height);
+    }
 
-   ctx.restore();
+    ctx.restore();
 
 }
 
 function drawPipe() {
     pipe.forEach(p => {
-        if(img.pipe.complete){
+        if (img.pipe.complete) {
             ctx.save();
-            ctx.translate(p.x + pipeWidth/2, p.top/2);
+            ctx.translate(p.x + pipeWidth / 2, p.top / 2);
             ctx.scale(1, -1);
             ctx.drawImage(
-                img.pipe, 
-                -pipeWidth/2,
-                -p.top/2,
+                img.pipe,
+                -pipeWidth / 2,
+                -p.top / 2,
                 pipeWidth,
                 p.top
             );
-        ctx.restore();
-        ctx.drawImage(
-            img.pipe,
-            p.x,
-            p.bottom,
-            pipeWidth,
-            canvas.height - p.bottom
-        );
+            ctx.restore();
+            ctx.drawImage(
+                img.pipe,
+                p.x,
+                p.bottom,
+                pipeWidth,
+                canvas.height - p.bottom
+            );
         } else {
             // Fallback: retângulos verdes
             ctx.fillStyle = '#228B22';
@@ -126,7 +126,7 @@ function drawPipe() {
 }
 
 function createPipe() {
-    const topHeight = Math.random() * (canvas.height - pipeHeightDistance - 100) + 50;
+    const topHeight = Math.random() * (canvas.height - pipeHeightDistance - 100) + 100;
     const bottomY = topHeight + pipeHeightDistance;
 
     pipe.push({
@@ -138,15 +138,8 @@ function createPipe() {
 
 }
 
-function startGame() {
-    gameStarted = true;
-    startTime = Date.now();
-
-    timerInterval = setInterval(updateTimer, 1000);
-}
-
 function atualizar() {
-    if(!jogoAtivo) return;
+    if (!jogoAtivo) return;
     bird.birdSpeed += bird.fall;
     bird.y += bird.birdSpeed;
 
@@ -156,7 +149,7 @@ function atualizar() {
     })
     pipe = pipe.filter(pipe => pipe.x + pipeWidth > 0);
     frameCount++;
-    if(frameCount %100 === 0){
+    if (frameCount % 100 === 0) {
         createPipe();
     }
 }
@@ -165,13 +158,13 @@ function renderizar() {
     bgLoop();
     drawBird();
     drawPipe();
-    if(jogoAtivo) {
+    if (jogoAtivo) {
         atualizar();
         requestAnimationFrame(renderizar);
     }
 }
 
-function desenharTelaInicial(){
+function desenharTelaInicial() {
     bgLoop();
     drawBird();
     drawPipe();
@@ -179,5 +172,15 @@ function desenharTelaInicial(){
 }
 
 function jump() {
-    
+    bird.birdSpeed = bird.jump;
 }
+
+// 3. Adicione os ouvintes de eventos (Espaço e Clique)
+document.addEventListener('keydown', (event) => {
+    if (event.code === 'Space') {
+        event.preventDefault(); //Desativa o scroll do navegador
+        jump();
+    }
+});
+
+document.addEventListener('mousedown', jump);
