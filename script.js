@@ -152,6 +152,8 @@ function atualizar() {
     if (frameCount % 100 === 0) {
         createPipe();
     }
+
+    collision();
 }
 
 function renderizar() {
@@ -184,3 +186,21 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.addEventListener('mousedown', jump);
+
+
+function collision() {    
+    if (bird.y <= 0 || bird.y + bird.height >= canvas.height) {
+        gameOver();
+        return;
+    }
+}
+
+function gameOver() {
+    ctx.fillStyle = 'red';
+    ctx.fillRect(0, canvas.height / 2 - 50, canvas.width, 100);
+
+    ctx.fillStyle = 'black';
+    ctx.font = 'bold 20px Jersey 10';
+    ctx.textAlign = 'center';
+    ctx.fillText('GAME OVER!', canvas.height / 2, canvas.width / 2); 
+}
