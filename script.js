@@ -73,7 +73,7 @@ function bgLoop() {
 function drawBird() {
     ctx.save();
 
-    bird.rotate = Math.min(Math.max(bird.speed * 3, -25), 90);
+    bird.rotate = Math.min(Math.max(bird.birdSpeed * 3, -25), 90);
 
     ctx.translate(bird.x + bird.width / 2, bird.y + bird.height / 2);
     ctx.rotate(bird.rotate * Math.PI / 180);
@@ -193,9 +193,20 @@ function collision() {
         gameOver();
         return;
     }
-}
+
+    pipe.forEach(p => {
+        if (bird.x + bird.width > pipe.x && bird.x < pipe.x + pipeWidth) {
+            if (bird.y + bird.height > p.bottom || bird.y < p.top ) {
+                gameOver();
+            }
+        }
+    });
+        
+        
+    }
 
 function gameOver() {
+   // jogoAtivo=false;
     ctx.fillStyle = 'red';
     ctx.fillRect(0, canvas.height / 2 - 50, canvas.width, 100);
 
