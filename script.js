@@ -145,8 +145,12 @@ function atualizar() {
 
     pipe.forEach(pipe => {
         pipe.x -= 2;
-        //contar pontos
-    })
+        if (!pipe.pass && pipe.x + pipeWidth < bird.x) {
+            pipe.pass = true;
+            points++;
+            score.textContent = points;
+        }
+    });
     pipe = pipe.filter(pipe => pipe.x + pipeWidth > 0);
     frameCount++;
     if (frameCount % 100 === 0) {
@@ -189,13 +193,13 @@ document.addEventListener('mousedown', jump);
 
 
 function collision() {    
-    if (bird.y <= 0 || bird.y + bird.height >= canvas.height) {
+    if (bird.y + bird.height >= canvas.height || bird.y <= 0) {
         gameOver();
         return;
     }
 
     pipe.forEach(p => {
-        if (bird.x + bird.width > pipe.x && bird.x < pipe.x + pipeWidth) {
+        if (bird.x + bird.width > p.x && bird.x < p.x + pipeWidth) {
             if (bird.y + bird.height > p.bottom || bird.y < p.top ) {
                 gameOver();
             }
@@ -206,12 +210,16 @@ function collision() {
     }
 
 function gameOver() {
-   // jogoAtivo=false;
+    jogoAtivo=false;
     ctx.fillStyle = 'red';
-    ctx.fillRect(0, canvas.height / 2 - 50, canvas.width, 100);
+    ctx.fillRect(0, canvas.height/2 - 50, canvas.width, 100);
 
     ctx.fillStyle = 'black';
-    ctx.font = 'bold 20px Jersey 10';
+    ctx.font = 'bold 20px "Jersey 10"';
     ctx.textAlign = 'center';
-    ctx.fillText('GAME OVER!', canvas.height / 2, canvas.width / 2); 
+    ctx.fillText('GAME OVER!', canvas.width/2, canvas.height/2); 
+}
+
+function pontos() {
+
 }
