@@ -26,7 +26,7 @@ const totalImg = 3;
 Object.values(img).forEach(img => {
     img.onload = () => {
         loadImg++;
-        if (loadImg===totalImg) {
+        if (loadImg === totalImg) {
             createPipe();
             renderizar();
         }
@@ -40,13 +40,16 @@ const speed = 1;
 const bird = {
     width: 50,
     height: 50,
-    jump: -5,
+    jump: -5.5,
     fall: 0.3,
     birdSpeed: 0,
     rotate: 0,
     x: 50,
     y: canvas.height / 2,
 }
+
+const jumpSound = new Audio('sounds/whoosh.mp3');
+const hitSound = new Audio('sounds/punch.mp3');
 
 let pipe = [];
 const pipeDistance = 640;
@@ -164,10 +167,25 @@ function renderizar() {
     bgLoop();
     drawBird();
     drawPipe();
+    //pontos();
+
     if (jogoAtivo) {
         atualizar();
-        requestAnimationFrame(renderizar);
+    } else {
+        drawGameOver();
     }
+
+    requestAnimationFrame(renderizar);
+}
+
+function drawGameOver() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.fillRect(0, canvas.height/2 - 60, canvas.width, 120);
+
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 40px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('GAME OVER!', canvas.width/2, canvas.height/2);
 }
 
 function desenharTelaInicial() {
@@ -179,9 +197,10 @@ function desenharTelaInicial() {
 
 function jump() {
     bird.birdSpeed = bird.jump;
+    jumpSound.currentTime = 0;
+    jumpSound.play();
 }
 
-// 3. Adicione os ouvintes de eventos (Espaço e Clique)
 document.addEventListener('keydown', (event) => {
     if (event.code === 'Space') {
         event.preventDefault(); //Desativa o scroll do navegador
@@ -192,7 +211,7 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('mousedown', jump);
 
 
-function collision() {    
+function collision() {
     if (bird.y + bird.height >= canvas.height || bird.y <= 0) {
         gameOver();
         return;
@@ -200,26 +219,44 @@ function collision() {
 
     pipe.forEach(p => {
         if (bird.x + bird.width > p.x && bird.x < p.x + pipeWidth) {
-            if (bird.y + bird.height > p.bottom || bird.y < p.top ) {
+            if (bird.y + bird.height > p.bottom || bird.y < p.top) {
+                hitSound.currentTime = 0;
+                hitSound.play();
                 gameOver();
             }
         }
     });
-        
-        
-    }
+
+
+}
 
 function gameOver() {
-    jogoAtivo=false;
+    jogoAtivo = false;
+    if (points > record) {
+        record = points;
+        localStorage.setItem('record', record);
+        records.textContent = record;
+    }
     ctx.fillStyle = 'red';
-    ctx.fillRect(0, canvas.height/2 - 50, canvas.width, 100);
+    ctx.fillRect(0, canvas.height / 2 - 50, canvas.width, 100);
 
     ctx.fillStyle = 'black';
     ctx.font = 'bold 20px "Jersey 10"';
     ctx.textAlign = 'center';
-    ctx.fillText('GAME OVER!', canvas.width/2, canvas.height/2); 
+    ctx.fillText('GAME OVER!', canvas.width / 2, canvas.height / 2);
+    ctx.font = 'bold 40px "Jersey 10"';
+    ctx.fillText(`pontos: ${points}`, canvas.width / 2, canvas.height / 2 - 30);
 }
 
-function pontos() {
+/*function pontos() {
+    ctx.fillStyle = "white";
+    ctx.font = 'bold 40px "Jersey 10"';
+    ctx.textAlign = "center";
+    ctx.fillText(points, canvas.width / 2, 80);
 
-}
+    if (points > record) {
+        record = points;
+        localStorage.setItem('records', record);
+        records.textContent = record;
+    }
+}*/
