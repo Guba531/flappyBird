@@ -5,7 +5,7 @@
     <meta chat set UTF-8>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flappy Bird</title>
-   <link rel="stylesheet" href="style2.css">
+   <link rel="stylesheet" href="style.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Fuzzy+Bubbles:wght@400;700&family=Jersey+10&family=Mochiy+Pop+One&family=Modak&display=swap"
         rel="stylesheet">
@@ -15,9 +15,21 @@
 
     <div class="prancheta-container">
         <canvas id="myCanvas" width="1265" height="530"></canvas>
+
+        <div class="overlay-gameOver" id="overlayGameOver">
+            <div class="overlay-content">
+                <h1 class="overlay-title">Você Perdeu!</h1>
+                <div class="overlay-stats">
+                    <p>Pontos:<span id="scores"></span></p>
+                    <p>Recorde:<span id="records"></span></p>
+                </div>
+                <div class="overlay-buttons">
+                    <button class="buttons" id="shareBtn">Compartilhar Pontuação</button>
+                    <button class="buttons" id="resetBtn">Jogar Denovo</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="record">Recorde: <span id="records"></span></div>
-    <div class="score">Pontos: <span id="scores"></span></div>
     <script src="script.js"></script>
 </body>
 

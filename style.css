@@ -85,3 +85,67 @@ h1 {
     transform: translateY(4px);
     box-shadow: 0 2px 0 #5C3A1A, 0 5px 8px rgba(0, 0, 0, 0.3);
 }
+
+.prancheta-container{
+    position: relative;
+    display: inline-block;
+}
+
+.overlay-gameOver {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 10;
+
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.overlay-gameOver.ativo {
+    display: flex;
+}
+
+.overlay-content {
+    text-align: center;
+    color: white;
+    font-family: 'Jersey 10', sans-serif;
+}
+
+.overlay-title {
+    font-size: 3rem;
+    color: #f44;
+    margin-bottom: 1rem;
+}
+
+.overlay-stats {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.overlay-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.buttons {
+    padding: 0.6rem 1.4rem;
+    font-size: 1.1rem;
+    font-family: 'Jersey 10', sans-serif;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background: #ffdd00;
+    color: #333;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.buttons:hover {
+    background: #ffc200;
+}

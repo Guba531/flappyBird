@@ -1,9 +1,10 @@
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
-const restartBtn = document.getElementById('resetBtn');
-const startBtn = document.getElementById('startBtn');
+const resetBtn = document.getElementById('resetBtn');
+const shareBtn = document.getElementById('shareBtn');
 const score = document.getElementById('scores');
 const records = document.getElementById('records');
+const overlayGameOver = document.getElementById('overlayGameOver');
 
 let jogoAtivo = true;
 let points = 0;
@@ -167,7 +168,7 @@ function renderizar() {
     bgLoop();
     drawBird();
     drawPipe();
-    //pontos();
+    pontos();
 
     if (jogoAtivo) {
         atualizar();
@@ -237,18 +238,19 @@ function gameOver() {
         localStorage.setItem('record', record);
         records.textContent = record;
     }
-    ctx.fillStyle = 'red';
-    ctx.fillRect(0, canvas.height / 2 - 50, canvas.width, 100);
+    score.textContent = points;
+    records.textContent = record;
 
-    ctx.fillStyle = 'black';
-    ctx.font = 'bold 20px "Jersey 10"';
-    ctx.textAlign = 'center';
-    ctx.fillText('GAME OVER!', canvas.width / 2, canvas.height / 2);
-    ctx.font = 'bold 40px "Jersey 10"';
-    ctx.fillText(`pontos: ${points}`, canvas.width / 2, canvas.height / 2 - 30);
+    overlayGameOver.classList.add('ativo');
 }
 
-/*function pontos() {
+resetBtn.addEventListener('click', ()=>{
+    bird.birdSpeed = 0;
+    bird.y = canvas.height/2;
+    points = 0;
+})
+
+function pontos() {
     ctx.fillStyle = "white";
     ctx.font = 'bold 40px "Jersey 10"';
     ctx.textAlign = "center";
@@ -259,4 +261,4 @@ function gameOver() {
         localStorage.setItem('records', record);
         records.textContent = record;
     }
-}*/
+}
